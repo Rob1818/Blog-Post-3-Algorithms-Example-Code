@@ -48,11 +48,10 @@ This process is continued until the condition is false.
 */
 
 function bubbleSort(array) {
-  let length = array.length;
   // OUTER LOOP
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < array.length; i++) {
     // INNER LOOP
-    for (j = 0; j < length - i - 1; j++) {
+    for (j = 0; j < array.length - i - 1; j++) {
       // COMPARE & SWAP
       if (array[j] > array[j + 1]) {
         const temp = array[j];
@@ -89,12 +88,11 @@ the largests item floats to the end so there is now need to keep checking them. 
 // SELECTION SORT
 
 function selectionSort(array) {
-  let length = array.length;
   // OUTER LOOP
-  for (let i = 0; i < length - 1; i++) {
+  for (let i = 0; i < array.length - 1; i++) {
     let minIndex = i;
     // INNER LOOP
-    for (let j = i + 1; j < length; j++) {
+    for (let j = i + 1; j < array.length; j++) {
       // COMPARE
       if (array[j] < array[minIndex]) {
       }
@@ -111,7 +109,7 @@ function selectionSort(array) {
 
 const selArray = [69, 72, 1, 4, 2, 300, 2002, 92];
 
-console.log(selArray(selArray));
+console.log(selectionSort(selArray));
 
 // OUTER LOOP
 /* 
@@ -139,8 +137,99 @@ Swap the elements to their correct places.
 
 // -----------------------------------------------------------
 
-// ISERTION SORT
+// INSERTION SORT
 
 function insertionSort(array) {
+  // OUTER LOOP
+  for (let i = 1; i < array.length; i++) {
+    // INNER LOOP
+    for (let j = i; j > 0; j--) {
+      // COMPARE & SWAP
+      if (array[j] < array[j - 1]) {
+        [array[j], array[j - 1]] = [array[j - 1], array[j]];
+      } else {
+        break;
+      }
+    }
+  }
+  // RETURN SORTED ARRAY
   return array;
 }
+
+const inserArray = [69, 72, 1, 4, 2, 300, 2002, 92, 45, 120];
+
+console.log(insertionSort(inserArray));
+
+// -----------------------------------------------------------
+
+// MERGE SORT
+
+// helper function - left and right are sorted
+function merge(leftArray, rightArray) {
+  const output = [];
+  let leftIndex = 0;
+  let rightIndex = 0;
+
+  while (leftIndex < leftArray.length && rightIndex < rightArray.length) {
+    const leftElement = leftArray[leftIndex];
+    const rightElement = rightArray[rightIndex];
+
+    if (leftElement < rightElement) {
+      output.push(leftElement);
+      leftIndex++;
+    } else {
+      output.push(rightElement);
+      rightIndex++;
+    }
+  }
+  return [
+    ...output,
+    ...leftArray.slice(leftIndex),
+    ...rightArray.slice(rightIndex),
+  ];
+}
+
+function mergeSort(array) {
+  if (array.length <= 1) {
+    return array;
+  }
+
+  const middleIndex = Math.floor(array.length / 2);
+  const leftArray = array.slice(0, middleIndex);
+  const rightArray = array.slice(middleIndex);
+  return merge(mergeSort(leftArray), mergeSort(rightArray));
+}
+
+const merArray = [69, 72, 1, 4, 2, 300, 2002, 92, 82, 82, 4000];
+console.log(mergeSort(merArray));
+
+// -----------------------------------------------------------
+
+// QUICK SORK
+
+function quickSort(array) {
+  if (array.length == 1) {
+    return array;
+  }
+  const pivot = array[array.length - 1];
+  const leftArray = [];
+  const rightArray = [];
+  for (let i = 0; i < array.length - 1; i++) {
+    if (array[i] < pivot) {
+      leftArray.push(array[i]);
+    } else {
+      rightArray.push(array[i]);
+    }
+  }
+
+  if (leftArray.length > 0 && rightArray.length > 0) {
+    return [...quickSort(leftArray), pivot, ...quickSort(rightArray)];
+  } else if (leftArray.length > 0) {
+    return [...quickSort(leftArray), pivot];
+  } else {
+    return [pivot, ...quickSort(rightArray)];
+  }
+}
+
+const quiArray = [69, 600, 72, 1, 4, 670, 82, 2, 300, 2002, 92];
+console.log(quickSort(quiArray));
